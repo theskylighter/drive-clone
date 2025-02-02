@@ -13,7 +13,10 @@ const storage = firebaseStorage({
 });
 
 const upload = multer({
-    storage: storage
+    storage: storage,
+    limits: {
+        fileSize: 2 * 1024 * 1024 // 5 MB limit
+    }
 });
 
 module.exports = upload;
