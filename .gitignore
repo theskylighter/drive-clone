@@ -1,0 +1,18 @@
+# Environment variables
+.env
+
+# Firebase credentials
+*-firebase-adminsdk*.json
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+
+# Upload directory
+uploads/
+
+# IDE specific files
+.vscode/
+.idea/
