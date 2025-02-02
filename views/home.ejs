@@ -11,10 +11,10 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
 </head>
 
-<body>
+<body class="p-4 bg-gray-300 dark:bg-gray-800 h-full w-screen">
 
 
-    <main class="p-4 bg-gray-100 dark:bg-gray-800 h-screen w-screen">
+    <main>
         <div class="header flex items-center justify-start"> 
 
             <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
@@ -31,12 +31,12 @@
                 </g>
             </svg>
 
-            <h1 class="text-5xl font-bold text-gray-300">Cloud9</h1>
+            <h1 class="text-5xl font-bold text-gray-900 dark:text-gray-300">Cloud9</h1>
         </div>
           
         <div class=" flex items-center justify-between">
 
-            <h2 class="text-2xl font-bold text-gray-300 mt-2">WELCOME, <%=user.username%>
+            <h2 class="text-2xl font-bold text-gray-700 dark:text-gray-300 mt-2">WELCOME, <%=user.username%>
             </h2>
             <a href="/logout" class="text-blue-600 hover:text-blue-300 "><i class="ri-logout-box-line text-2xl"></i>Logout</a>
         </div>
@@ -71,7 +71,7 @@
         </div>
 
         <div class="section mt-5 mb-4 bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-md ">
-            <H1 class="text-3xl font-bold text-gray-300">Files :</H1>
+            <H1 class="text-3xl font-bold text-gray-700 dark:text-gray-300">Files :</H1>
             <div class="files  flex flex-col gap-2 mt-3">
 
                 <% files.forEach(file=>{ %>
