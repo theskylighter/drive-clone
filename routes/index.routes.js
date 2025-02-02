@@ -29,6 +29,9 @@ router.post(
   authMiddleware,
   upload.single("file"),
   async (req, res) => {
+    if (!req.file) {
+        return res.status(400).send("No file uploaded or file upload failed");
+      }
     const newfile = await fileModel.create({
       // fill the req.file metadata into the fileSchema
       path: req.file.path,
@@ -39,7 +42,7 @@ router.post(
       user: req.user.userId,
       // So, now just need to access the `userId` from it
     });
-    res.send(req.file);
+    res.redirect("/home");
   }
 );
 
