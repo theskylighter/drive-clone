@@ -110,7 +110,7 @@ DRIVE_clone (Cloud9) is a web application built using Node.js, Express, and Mong
 2. **Install Dependencies**
    - Open your terminal in the project directory and run:
      ```
-     npm install
+     yarn install
      ```
 
 3. **Environment Variables**
@@ -141,7 +141,7 @@ DRIVE_clone (Cloud9) is a web application built using Node.js, Express, and Mong
 ### Start the Server
 - Use the following command to start the server:
   ```
-  npm start
+  yarn start
   ```
 - The server will run on `http://localhost:3000`.
 
