@@ -1,16 +1,4 @@
-## Tech/packages used   
-1. tailwind CSS
-2. flowbite (plugin for tailwind)  
-3. remixicon (close icons)
-4. bcrypt (for hashing passwords)
-5. JWT (for authentication)
-6. firebase (cloud storage)
-7. multer (for storage of user_files from frontend to backend)
-8. multer firebase storage (for firebase storage)
-
-
-
-## 2. Technologies Used
+## Technologies Used
 - **Node.js & Express:** Server and API development.
 - **MongoDB & Mongoose:** Managing the database.
 - **EJS:** Templating engine for creating HTML pages.
@@ -18,6 +6,7 @@
 - **Firebase:** For cloud storage.
 - **JWT & bcrypt:** Handling authentication and secure password storage.
 - **Multer:** Managing file uploads.
+- **Validator:** Validating user input.
 
 ## NOTE:
   ### How is REST API Different from SSR?
