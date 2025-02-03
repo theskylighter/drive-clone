@@ -8,7 +8,7 @@ const connectToDB = require('./config/db');
 connectToDB();
 const cookieParser = require('cookie-parser');  
 
-
+// register MIDDLEWARES functions for all the routes [incoming requests]
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
@@ -16,6 +16,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.static('public'));
 
 
+// register MIDDLEWARES for a specific route
 app.use('/',indexRouter); //checked first
 app.use('/user',userRouter); //checked second if not first
 app.set('view engine','ejs');
