@@ -12,10 +12,16 @@ router.get("/", (req, res) => {
 });
 
 router.get("/home", authMiddleware, async (req, res) => {
-  const userFiles = await fileModel.find({ user: req.user.userId });
-  console.log(userFiles);
+  try {
+    const userFiles = await fileModel.find({ user: req.user.userId });
+    console.log(userFiles);
 
-  res.render("home", { files: userFiles, user: req.user });
+    res.render("home", { files: userFiles, user: req.user });
+  } catch (err) {
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
 });
 router.get("/home_sonnet", authMiddleware, async (req, res) => {
   const userFiles = await fileModel.find({ user: req.user.userId });
@@ -30,8 +36,8 @@ router.post(
   upload.single("file"),
   async (req, res) => {
     if (!req.file) {
-        return res.status(400).send("No file uploaded or file upload failed");
-      }
+      return res.status(400).send("No file uploaded or file upload failed");
+    }
     const newfile = await fileModel.create({
       // fill the req.file metadata into the fileSchema
       path: req.file.path,
@@ -43,7 +49,7 @@ router.post(
       // So, now just need to access the `userId` from it
     });
     res.redirect("/home");
-  }
+  },
 );
 
 router.get("/download/:path", authMiddleware, async (req, res) => {
@@ -53,11 +59,10 @@ router.get("/download/:path", authMiddleware, async (req, res) => {
   console.log(req.params);
   const path = req.params.path;
 
-
   const file = await fileModel.findOne({
     user: loggedInUserId,
     path: path,
-  })
+  });
   console.log(file);
 
   if (!file) {
@@ -69,11 +74,14 @@ router.get("/download/:path", authMiddleware, async (req, res) => {
   const firebaseConfig = require("../config/firebase.config");
   // res.download(file.path);
 
-  const signedUrl = await firebaseConfig.storage().bucket().file(path).getSignedUrl({
+  const signedUrl = await firebaseConfig
+    .storage()
+    .bucket()
+    .file(path)
+    .getSignedUrl({
       action: "read",
       expires: Date.now() + 15 * 60 * 1000, //15 minutes
       responseDisposition: `attachment; filename="${file.originalname}"`,
-
     });
   res.redirect(signedUrl[0]);
 });

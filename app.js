@@ -27,6 +27,10 @@ app.set('view engine','ejs');
 
 const PORT = process.env.PORT || 3000;
 
+process.on('uncaughtException', (err)=>{
+    console.log('uncaught Exception');
+    console.log(err);
+})
 app.listen(PORT, () => {
     console.log(`server is running on port ${PORT}`);
 });
