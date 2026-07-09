@@ -12,7 +12,15 @@ const router = express.Router();
 //     res.send('test route');
 // })
 router.get("/register", (req, res) => {
-  res.render("register");
+  const token = req.cookies.token;
+
+//   token hai ya nahi
+  if (!token) {
+    res.render("register");
+  }
+  else {
+    res.redirect("home")
+  }
 });
 router.post(
     "/register",
@@ -47,7 +55,15 @@ router.post(
 );
 
 router.get("/login", (req, res) => {
-  res.render("login");
+  const token = req.cookies.token;
+
+//   token hai ya nahi
+  if (!token) {
+    res.render("login");
+  }
+  else {
+    res.redirect("home")
+  }
 
 });
 router.post(
