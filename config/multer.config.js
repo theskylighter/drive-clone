@@ -1,21 +1,20 @@
 const multer = require('multer');
 const firebaseStorage = require('multer-firebase-storage');
-const serviceAccount = require('../drive-2708-firebase-adminsdk-fbsvc-fda003590b.json');
 
 const storage = firebaseStorage({
     credentials: {
-        clientEmail: serviceAccount.client_email,
-        privateKey: serviceAccount.private_key,
-        projectId: serviceAccount.project_id,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        projectId: process.env.FIREBASE_PROJECT_ID,
     },
-    bucketName: 'drive-2708.firebasestorage.app',
+    bucketName: process.env.FIREBASE_STORAGE_BUCKET,
     unique: true,
 });
 
 const upload = multer({
     storage: storage,
     limits: {
-        fileSize: 2 * 1024 * 1024 // 5 MB limit
+        fileSize: 1 * 1024 * 1024 // 1 MB limit
     }
 });
 
