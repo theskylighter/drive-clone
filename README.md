@@ -1,164 +1,118 @@
-# DRIVE_clone Project Guide
+# Cloud9 (DRIVE_clone)
 
-Welcome to the DRIVE_clone project! This guide will walk you through the project in simple terms, making it easy for beginners to set up, understand, and contribute.
+![Cloud9 Banner Placeholder](./docs/screenshots/banner.png)
+
+Welcome to **Cloud9** (formerly DRIVE_clone)! This guide will walk you through the project in simple terms, making it easy for beginners to set up, understand, and contribute.
+
+---
 
 ## 1. Overview
-DRIVE_clone (Cloud9) is a web application built using Node.js, Express, and MongoDB. It uses EJS for server-side rendering along with Tailwind CSS and Flowbite for styling. Key features include:
-- User registration and login with secure authentication
-- Modern, responsive UI with dark mode support
-- File uploads with Firebase cloud storage integration
-- File download functionality with signed URLs
-- Branded as "Cloud9" with custom logo and styling
+Cloud9 is a modern web application built using Node.js, Express, and MongoDB. It uses EJS for server-side rendering along with Tailwind CSS and Flowbite for sleek, responsive styling.
+
+### Key Features
+- 🔒 **Secure Authentication:** User registration and login with encrypted passwords.
+- 🌙 **Modern UI:** Responsive design with full dark mode support.
+- ☁️ **Cloud Storage:** Direct file uploads to Firebase.
+- ⏱️ **Demo Mode (New!):** Limit uploads, enforce a 24-hour TTL (Time-To-Live) on files, and enable a one-click guest login bypass.
+- 🗑️ **File Management (New!):** Upload files via a drag-and-drop modal (now showing selected file names) and easily delete them from both the database and Firebase storage.
+
+![Home Screen Placeholder](./docs/screenshots/home.png)
+
+---
 
 ## 2. Technologies Used
 
-### Backend
-- **Node.js & Express:** Server and API development.
-- **JWT & bcrypt:** Secure authentication and password encryption.
+- **Backend:** Node.js, Express, JWT, bcrypt
+- **Frontend:** EJS, Tailwind CSS, Flowbite
+- **Database:** MongoDB, Mongoose
+- **Storage:** Firebase Cloud Storage, Multer
 
-### Frontend
-- **EJS:** Templating engine for rendering HTML pages.
-- **Tailwind CSS & Flowbite:** Tools for designing and styling the user interface.
+---
 
-### Database
-- **MongoDB & Mongoose:** Managing the database and interacting with data.
+## 3. Demo Mode & Recent Updates
 
-### File Handling & Cloud Storage
-- **Multer:** Handling file uploads.
-- **Firebase:** Cloud storage solution for uploaded files.
+We've recently introduced a **Demo Mode** (`DEMO_MODE=true` in `.env`) tailored for public showcases:
+1. **Guest Login Bypass:** Disables new registrations and pre-fills the login page with a `guest` / `guest123` account that bypasses the database completely.
+2. **File Upload Limits:** Caps uploads at 5 files per account and restricts file sizes to 100 KB.
+3. **24-Hour Auto-Deletion:** Automatically deletes uploaded files after 24 hours using MongoDB TTL indexes and UI banners to notify users.
+4. **Enhanced UI:** 
+   - A functional delete button allows users to immediately delete their files.
+   - The drag-and-drop upload form now displays the selected file name before submission.
 
+![Demo Mode Login Placeholder](./docs/screenshots/demo-login.png)
 
-## 3. Project Structure
-```
+---
+
+## 4. Project Structure
+```text
 /DRIVE_clone
 │
 ├── app.js                # Main entry point of the application.
-├── package.json          # Project dependencies and scripts.
 ├── .env                  # Environment variables (MongoDB URI, JWT secret).
-├── .gitignore            # Files and folders to ignore in version control.
-│
-├── config/               # Configuration files
-│   ├── db.js           # Database connection setup.
-│   ├── firebase.config.js  # Firebase configuration details.
-│   └── multer.config.js    # File upload configurations.
-│
-├── models/               # Mongoose schemas for MongoDB.
-│   ├── user.model.js   # Schema for users.
-│   └── files.model.js  # Schema for uploaded files.
-│
-├── middlewares/          # Express middlewares.
-│   └── auth.js         # JWT authentication middleware.
-│
-├── routes/               # Express route definitions.
-│   ├── index.routes.js # Routes for home, file uploads, etc.
-│   └── user.routes.js  # Routes for user registration and login.
-│
-└── views/                # EJS templates.
-    ├── index.ejs       # Homepage template.
-    ├── home.ejs        # Home view after logging in.
-    ├── login.ejs       # Login page template.
-    └── register.ejs    # Registration page template.
-└── public/               # Static assets
-    └── logo.svg         # Application logo
+├── config/               # Database, Firebase, and Multer configs.
+├── models/               # Mongoose schemas (User, Files).
+├── middlewares/          # JWT authentication middleware.
+├── routes/               # Express routes (index, user).
+├── views/                # EJS templates (home, login, register).
+└── public/               # Static assets (logo.svg).
 ```
 
-## 4. UI Features
-- **Branding:** Consistent "Cloud9" branding across all pages with custom cloud logo
-- **Dark Mode:** Full dark mode support across all pages
-- **Responsive Design:** Works on mobile and desktop devices
-- **Modern Interface:** 
-  - Clean card-based file layout
-  - Drag-and-drop file upload support
-  - Modal-based upload interface
-  - Intuitive navigation
+---
 
-## 5. Authentication Flow
-1. **Registration:**
-   - User fills out registration form
-   - Data is validated
-   - Password is hashed
-   - User is redirected to login page
-   
-2. **Login:**
-   - User enters credentials
-   - JWT token is generated
-   - Token is stored in cookies
-   - User is redirected to home page
-
-## 6. File Management
-- **Upload:**
-  - Modal interface for file selection
-  - Progress indication
-  - Direct upload to Firebase storage
-  
-- **Download:**
-  - Secure download links using Firebase signed URLs
-  - 15-minute expiration on download links
-  - Original filename preserved
-
-## 7. Setup Instructions
+## 5. Setup Instructions
 
 ### Prerequisites
-- Make sure you have Node.js and npm installed.
-- MongoDB should be installed and running on your local machine (or update MONGO_URI in `.env` accordingly).
-- A Firebase project configured with Cloud Storage if you plan to use file uploads.
+- Node.js and npm installed.
+- MongoDB running locally or a connection string ready.
+- A Firebase project configured with Cloud Storage.
 
 ### Installation
-1. **Clone the Repository**
-   - If not already cloned, download the project files to your computer.
+1. **Clone & Install**
+   ```bash
+   git clone <your-repo-url>
+   cd DRIVE_clone
+   yarn install
+   ```
 
-2. **Install Dependencies**
-   - Open your terminal in the project directory and run:
-     ```
-     yarn install
-     ```
+2. **Environment Variables**
+   Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
+   Update `.env` with your credentials:
+   ```env
+   MONGO_URI=your_mongodb_connection_string
+   JWT_SECRET=your_secure_random_string
+   DEMO_MODE=false # Set to true to enable demo features
+   ```
 
-3. **Environment Variables**
-   - Copy `.env.example` to create your own `.env` file:
-     ```bash
-     cp .env.example .env
-     ```
-   - Update the values in `.env` with your actual credentials:
-     ```
-     MONGO_URI=your_mongodb_connection_string
-     JWT_SECRET=your_secure_random_string
-     ```
+3. **Set Up Firebase**
+   - Create a project in the [Firebase Console](https://console.firebase.google.com).
+   - Generate a private key (Project Settings > Service Accounts).
+   - Save the JSON file as `firebase-credentials.json` in the root.
+   - Update `config/firebase.config.js` with your Firebase bucket name.
 
-4. **Set Up Firebase**
-   - Create a new Firebase project at [Firebase Console](https://console.firebase.google.com)
-   - Generate a new private key from Project Settings > Service Accounts
-   - Save the downloaded JSON as `firebase-credentials.json` in project root
-   - Update `config/firebase.config.js` with your Firebase bucket name
+![Upload Modal Placeholder](./docs/screenshots/upload-modal-placeholder.png)
 
-## Security Notes
-- Never commit `.env` or Firebase credential files to version control
-- Keep your JWT secret secure and randomly generated
-- Regularly rotate Firebase credentials in production
-- Use environment-specific configuration files
+---
 
-## 8. Running the Project
+## 6. Running the Project
 
-### Start the Server
-- Use the following command to start the server:
-  ```
-  yarn start
-  ```
-- The server will run on `http://localhost:3000`.
+Start the server:
+```bash
+yarn start
+```
+The server will run on `http://localhost:3000`.
 
-### Accessing the Application
-- **Registration:** Visit `http://localhost:3000/user/register` to create a new account.
-- **Login:** Visit `http://localhost:3000/user/login` to log in.
-- **Home & File Uploads:** After login, navigate to `http://localhost:3000/home` for the homepage and file upload functionality.
+- **Login:** `http://localhost:3000/user/login`
+- **Register:** `http://localhost:3000/user/register` (Unless `DEMO_MODE=true`)
+- **Home:** `http://localhost:3000/home`
 
-## 9. Development Tips
-- **Error Handling:** Ensure environment variables are set correctly, especially `MONGO_URI` and `JWT_SECRET`.
-- **File Uploads:** The Firebase bucket is set in `config/multer.config.js`. Verify your Firebase credentials if you encounter issues.
-- **Code Editing:** Follow the naming conventions in the project (e.g., use lower case for usernames) to avoid common errors.
+---
 
-## 10. Further Reading
-- Learn more about [Express.js](https://expressjs.com/).
-- Explore [Mongoose documentation](https://mongoosejs.com/).
-- Access [Tailwind CSS docs](https://tailwindcss.com/docs) for styling tips.
-- Visit [Firebase documentation](https://firebase.google.com/docs) for cloud storage and authentication details.
+## 7. Security Notes
+- Never commit `.env` or Firebase credential files.
+- Keep your JWT secret secure and randomly generated.
+- Regularly rotate Firebase credentials in production.
 
-Enjoy exploring and developing your project!
+Enjoy exploring and developing Cloud9!
