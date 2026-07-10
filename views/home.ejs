@@ -41,6 +41,15 @@
             <a href="/logout" class="text-blue-600 hover:text-blue-300 "><i class="ri-logout-box-line text-2xl"></i>Logout</a>
         </div>
 
+        <% if (locals.isDemoMode) { %>
+            <div class="mb-4 p-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-850 dark:text-yellow-300 flex items-center gap-2 border border-yellow-200 dark:border-yellow-900 animate-pulse shadow-sm" role="alert">
+                <i class="ri-error-warning-line text-lg"></i>
+                <div>
+                    <span class="font-bold">Demo Mode Active:</span> Uploads are limited to <span class="font-semibold">100 KB</span> per file and a maximum of <span class="font-semibold">5 files</span> per account. Files are automatically deleted after <span class="font-semibold">24 hours</span>.
+                </div>
+            </div>
+        <% } %>
+
         <div class="pop hidden   backdrop-blur fixed top-0 left-0 w-screen h-screen flex justify-center items-center">
 
             <form action="/upload" method="post" enctype="multipart/form-data">
@@ -56,7 +65,10 @@
                             </svg>
                             <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click
                                     to upload</span> or drag and drop</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 2mb)
+                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. <%= locals.isDemoMode ? '100 KB' : '1 MB' %>)
+                            </p>
+                            <p class="text-xs text-yellow-600 dark:text-yellow-500 mt-2 font-medium">
+                                <i class="ri-error-warning-line align-middle"></i> Files will be automatically deleted after 24 hours
                             </p>
                         </div>
                         <input id="dropzone-file" type="file" class="hidden" name="file" />
@@ -71,7 +83,10 @@
         </div>
 
         <div class="section mt-5 mb-4 bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-md ">
-            <H1 class="text-3xl font-bold text-gray-700 dark:text-gray-300">Files :</H1>
+            <div class="flex justify-between items-center mb-2">
+                <H1 class="text-3xl font-bold text-gray-700 dark:text-gray-300">Files :</H1>
+                <span class="text-sm text-yellow-600 dark:text-yellow-500 bg-yellow-50 dark:bg-gray-800 px-3 py-1.5 rounded-md font-medium border border-yellow-200 dark:border-gray-600"><i class="ri-time-line align-middle mr-1"></i> Auto-deleted after 24 hours</span>
+            </div>
             <div class="files  flex flex-col gap-2 mt-3">
 
                 <% files.forEach(file=>{ %>

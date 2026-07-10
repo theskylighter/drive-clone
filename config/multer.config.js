@@ -11,10 +11,13 @@ const storage = firebaseStorage({
     unique: true,
 });
 
+const isDemoMode = process.env.DEMO_MODE === 'true';
+const fileSizeLimit = isDemoMode ? 100 * 1024 : 1 * 1024 * 1024; // 100 KB in demo, 1 MB in production
+
 const upload = multer({
     storage: storage,
     limits: {
-        fileSize: 1 * 1024 * 1024 // 1 MB limit
+        fileSize: fileSizeLimit
     }
 });
 

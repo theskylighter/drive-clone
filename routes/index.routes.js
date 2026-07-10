@@ -16,24 +16,47 @@ router.get("/home", authMiddleware, async (req, res) => {
     const userFiles = await fileModel.find({ user: req.user.userId });
     console.log(userFiles);
 
-    res.render("home", { files: userFiles, user: req.user });
+    res.render("home", { 
+      files: userFiles, 
+      user: req.user,
+      isDemoMode: process.env.DEMO_MODE === 'true'
+    });
   } catch (err) {
     res.status(500).json({
       message: "Server Error",
     });
   }
 });
-router.get("/home_sonnet", authMiddleware, async (req, res) => {
-  const userFiles = await fileModel.find({ user: req.user.userId });
-  console.log(userFiles);
 
-  res.render("home_sonnet", { files: userFiles, user: req.user });
-});
 
 router.post(
   "/upload",
   authMiddleware,
-  upload.single("file"),
+  async (req, res, next) => {
+    if (process.env.DEMO_MODE === 'true') {
+      try {
+        const userFilesCount = await fileModel.countDocuments({ user: req.user.userId });
+        if (userFilesCount >= 5) {
+          return res.status(400).send("Upload limit reached (max 5 files in demo mode). Please wait for files to expire (24 hours).");
+        }
+      } catch (err) {
+        return res.status(500).send("Server error checking file count.");
+      }
+    }
+    next();
+  },
+  (req, res, next) => {
+    upload.single("file")(req, res, (err) => {
+      if (err) {
+        if (err.code === 'LIMIT_FILE_SIZE') {
+          const limit = process.env.DEMO_MODE === 'true' ? '100 KB' : '1 MB';
+          return res.status(400).send(`File size exceeds limit of ${limit}`);
+        }
+        return res.status(400).send(err.message || 'File upload failed');
+      }
+      next();
+    });
+  },
   async (req, res) => {
     if (!req.file) {
       return res.status(400).send("No file uploaded or file upload failed");

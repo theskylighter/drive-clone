@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const expiresValue = process.env.DEMO_MODE === 'true' ? 86400 : undefined;
+
 const fileSchema = new mongoose.Schema({   
     path:{
         type:String,
@@ -13,7 +15,11 @@ const fileSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:'users',
         required:[true,'User is required']    
-
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+        ...(expiresValue !== undefined ? { expires: expiresValue } : {})
     }
 });
 
