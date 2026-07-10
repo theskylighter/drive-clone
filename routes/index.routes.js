@@ -109,6 +109,42 @@ router.get("/download/:path", authMiddleware, async (req, res) => {
   res.redirect(signedUrl[0]);
 });
 
+router.post("/delete/:path", authMiddleware, async (req, res) => {
+  const loggedInUserId = req.user.userId;
+  const path = req.params.path;
+
+  try {
+    const file = await fileModel.findOne({
+      user: loggedInUserId,
+      path: path,
+    });
+
+    if (!file) {
+      return res.status(404).send("file not found");
+    }
+
+    const firebaseConfig = require("../config/firebase.config");
+    // Attempt to delete from Firebase Storage
+    try {
+      await firebaseConfig.storage().bucket().file(path).delete();
+    } catch (firebaseErr) {
+      console.warn("File not found in Firebase or error deleting from Firebase:", firebaseErr);
+      // We can continue to delete from DB even if Firebase delete fails
+    }
+    
+    // Delete from MongoDB
+    await fileModel.findOneAndDelete({
+      user: loggedInUserId,
+      path: path,
+    });
+
+    res.redirect("/home");
+  } catch (err) {
+    console.error("Error deleting file:", err);
+    res.status(500).send("Error deleting file");
+  }
+});
+
 router.get("/logout", (req, res) => {
   res.clearCookie("token");
   res.redirect("/user/login"); // or wherever your login route is
