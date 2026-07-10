@@ -12,6 +12,10 @@ const router = express.Router();
 //     res.send('test route');
 // })
 router.get("/register", (req, res) => {
+  if (process.env.DEMO_MODE === 'true') {
+    return res.redirect("/user/login");
+  }
+
   const token = req.cookies.token;
 
 //   token hai ya nahi
@@ -29,6 +33,10 @@ router.post(
     body("email").trim().isEmail().isLength({ min: 9 }),
     body("password").trim().isLength({ min: 5 }),
     async (req, res) => {
+        if (process.env.DEMO_MODE === 'true') {
+            return res.status(403).json({ message: "Registration is disabled in demo mode" });
+        }
+        
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             // res.send('invalid data');
@@ -59,7 +67,7 @@ router.get("/login", (req, res) => {
 
 //   token hai ya nahi
   if (!token) {
-    res.render("login");
+    res.render("login", { isDemoMode: process.env.DEMO_MODE === 'true' });
   }
   else {
     res.redirect("home")
@@ -78,6 +86,21 @@ router.post(
         .json({ errors: errors.array(), message: "invalid data" });
     }
     const { username, password } = req.body;
+
+    // Demo Mode Guest Login Bypass
+    if (process.env.DEMO_MODE === 'true' && username === 'guest' && password === 'guest123') {
+      const token = jwt.sign(
+        {
+          userId: '000000000000000000000000',
+          email: 'guest@cloud9.local',
+          username: 'guest',
+        },
+        process.env.JWT_SECRET,
+      );
+      res.cookie('token', token);
+      return res.redirect('/home');
+    }
+
     const user = await userModel.findOne({ username: username });
     if (!user) {
       return res
