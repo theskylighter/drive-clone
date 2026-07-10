@@ -105,8 +105,17 @@
         }
         function closePopUp() {
             document.querySelector('.pop').style.display = 'none';
-
         }
+
+        document.getElementById('dropzone-file').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name;
+            if (fileName) {
+                const textContainer = document.querySelector('label[for="dropzone-file"] p.text-sm');
+                if (textContainer) {
+                    textContainer.innerHTML = '<span class="font-semibold">Selected: </span> ' + fileName;
+                }
+            }
+        });
     </script>
 
 </body>
